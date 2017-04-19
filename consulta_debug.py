@@ -26,10 +26,15 @@ cfg.read('config.ini')
 CERT = cfg.get("geral","cert_pfx")
 SENHA = cfg.get("geral","cert_pwd")   
 HOMOLOG = cfg.getboolean("geral","homologacao")  
-UF = "PR"
+UF = "BA"
 
 con = ComunicacaoSefaz(UF, CERT, SENHA, HOMOLOG)  
-retorno = con.consultar_cadastro(modelo="nfe",ie="9999999999",cnpj="")
+retorno = con.consultar_cadastro(modelo="nfe",ie="",cnpj="00716869000137")
+# print (retorno.text)
+arq = open('bahia.htm','w')
+arq.write(retorno.text)
+arq.close
+
 root = etree.fromstring(retorno.content)
 elemento = root[1][0][0][0]
 ns = {'ns':'http://www.portalfiscal.inf.br/nfe'}    
@@ -37,11 +42,17 @@ cstat = elemento.xpath("ns:cStat", namespaces=ns)[0].text
 cnpj = ''
 csit = '0'
 if cstat in ['111','112']:
-    cnpj = elemento.xpath("ns:infCad/ns:CNPJ", namespaces=ns)[0].text
-    print('CNPJ==>'+cnpj)
-    csit = elemento.xpath("ns:infCad/ns:cSit", namespaces=ns)[0].text
-print (retorno.text)
+    print('tamanho:'+str(len(elemento)))    
+    for i in range(len(elemento)-1):
+        print('\n\nitem==>'+str(i))
+        cnpj = elemento.xpath("ns:infCad/ns:CNPJ", namespaces=ns)[i].text
+        print('CNPJ==>'+cnpj)
+        ie = elemento.xpath("ns:infCad/ns:IE", namespaces=ns)[i].text
+        print('IE==>'+ie)
+        cnae = elemento.xpath("ns:infCad/ns:CNAE", namespaces=ns)[i].text
+        print('CNAE==>'+cnae)
+        rgap = elemento.xpath("ns:infCad/ns:xRegApur", namespaces=ns)[i].text
+        print('Regime==>'+rgap)
+        csit = elemento.xpath("ns:infCad/ns:cSit", namespaces=ns)[i].text
 
-arq = open('retorno.htm','w')
-arq.write(retorno.text)
-arq.close
+     
