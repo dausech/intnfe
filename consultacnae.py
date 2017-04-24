@@ -34,25 +34,32 @@ def consulta_cad(uf,ie):
                                 
     return {'cstat':cstat, 'cnpj':cnpj, 'csit': csit, 'cnae':str(cnae), 'apur':str(apur)}
 
-def processar_arq(arquivo,saida):  
-    arqtxt = open(saida,"w")
-    relacao = open(arquivo,"r")    
+def processar_arq():  
     x = 0
     for linha in relacao:
-        x += 1                 
-        campos = linha.split(';')        
-        uf = campos[0]
-        cnpj = campos[1]
-        ie = campos[2]
-        rt = consulta_cad(uf,ie.strip())
-        ln = uf+';'+cnpj+';'+ie+';'+rt['cstat']+';'+rt['csit']+';'+rt['cnae']+';'+rt['apur']+'\n'
-        print('Linha: '+str(x)+'  -> '+ln)                    
+        x += 1
+        if x >= 10000 and x < 11000:
+            processar_linha(linha)
+            print('Linha: '+str(x))
+
+def processar_erros():   
+    for linha in linhas_reproc:        
+        print('Reprocessando:'+linha)
+        processar_linha(linha)
+        
+def processar_linha(linha):                          
+    campos = linha.split(';')        
+    uf = campos[0]
+    cnpj = campos[1]
+    ie = campos[2]
+    rt = consulta_cad(uf,ie.strip())
+    if rt['cstat'] == '999' and passo == 1:
+        linhas_reproc.append(linha)
+    else:  
+        ln = uf+';'+cnpj+';'+ie+';'+rt['cstat']+';'+rt['csit']+';'+rt['cnae']+';'+rt['apur']+'\n'                            
         arqtxt.write(ln)
-                               
-    relacao.close()
-    arqtxt.close()
-    #data_hora = time.strftime('%Y%m%d%H%M%S')
-    #os.rename(arquivo,DIR_HIST+data_hora+'-'+os.path.basename(arquivo))
+        if passo == 2:
+            linhas_reproc.remove(linha)
                                                                                                
 if __name__ == "__main__":
    cfg = configparser.ConfigParser()
@@ -63,7 +70,15 @@ if __name__ == "__main__":
    ARQ_IN = "in/clientes.txt"
    ARQ_OUT = "in/clientes_ret.txt"
    DIR_HIST = cfg.get("geral","dir_hist")  
-   
+   linhas_reproc = []
+   passo = 1
    if os.path.exists(ARQ_IN):
-       processar_arq(ARQ_IN,ARQ_OUT)
-    
+       arqtxt = open(ARQ_OUT,"w")
+       relacao = open(ARQ_IN,"r")  
+       processar_arq()
+       relacao.close()
+       passo = 2
+       while len(linhas_reproc) > 0:
+           print("Reprocessando consultas sem retorno...."+str(len(linhas_reproc)))                      
+           processar_erros()
+       arqtxt.close()
