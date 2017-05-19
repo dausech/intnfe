@@ -7,7 +7,7 @@ def status(modelo):
         con = ComunicacaoSefaz(UF, CERT, SENHA, homologacao)
         xml = con.status_servico(modelo)        
         return xml 
-    except SSLError:
+    except Exception:
         print('Erro comunicando com Servidor')
         return None    
 
