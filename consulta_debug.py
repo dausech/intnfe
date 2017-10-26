@@ -1,5 +1,6 @@
 from pynfe.processamento.comunicacao import ComunicacaoSefaz
 import requests
+import requests.exceptions
 import logging
 import configparser
 from lxml import etree
@@ -12,6 +13,29 @@ try:
 except ImportError:
     # Python 2
     import httplib as http_client
+
+def trata_retorno(retorno):
+    root = etree.fromstring(retorno.content)
+    try:
+        elemento = root[1][0][0][0]
+        ns = {'ns':'http://www.portalfiscal.inf.br/nfe'}    
+        cstat = elemento.xpath("ns:cStat", namespaces=ns)[0].text
+        cnpj = ''
+        csit = '0'
+        if cstat in ['111','112']:    
+            cnpj = elemento.xpath("ns:infCad/ns:CNPJ", namespaces=ns)[0].text
+            print('CNPJ==>'+cnpj)
+            ie = elemento.xpath("ns:infCad/ns:IE", namespaces=ns)[0].text
+            print('IE==>'+ie)
+            cnae = elemento.xpath("ns:infCad/ns:CNAE", namespaces=ns)[0].text
+            print('CNAE==>'+cnae)
+            rgap = elemento.xpath("ns:infCad/ns:xRegApur", namespaces=ns)[0].text
+            print('Regime==>'+str(rgap))
+            csit = elemento.xpath("ns:infCad/ns:cSit", namespaces=ns)[0].text
+    except IndexError:
+        print('Retorno com erro...')    
+    
+    
 http_client.HTTPConnection.debuglevel = 1
 
 # You must initialize logging, otherwise you'll not see debug output.
@@ -26,30 +50,17 @@ cfg.read('config.ini')
 CERT = cfg.get("geral","cert_pfx")
 SENHA = cfg.get("geral","cert_pwd")   
 HOMOLOG = cfg.getboolean("geral","homologacao")  
-UF = "PR"
+UF = "MS"
 
 con = ComunicacaoSefaz(UF, CERT, SENHA, HOMOLOG)  
-retorno = con.consultar_cadastro(modelo="nfe",ie="",cnpj="24165791000178")
-# print (retorno.text)
-arq = open('foz.htm','w')
-arq.write(retorno.text)
-arq.close
+try:
+    retorno = con.consultar_cadastro(modelo="nfe",ie="",cnpj="05958813000102")    
+    trata_retorno(retorno)
+    arq = open('retorno.htm','w')
+    arq.write(retorno.text)
+    arq.close
+except requests.exceptions.RequestException:
+    print('erro ao conectar..')
 
-root = etree.fromstring(retorno.content)
-elemento = root[1][0][0][0]
-ns = {'ns':'http://www.portalfiscal.inf.br/nfe'}    
-cstat = elemento.xpath("ns:cStat", namespaces=ns)[0].text
-cnpj = ''
-csit = '0'
-if cstat in ['111','112']:    
-    cnpj = elemento.xpath("ns:infCad/ns:CNPJ", namespaces=ns)[0].text
-    print('CNPJ==>'+cnpj)
-    ie = elemento.xpath("ns:infCad/ns:IE", namespaces=ns)[0].text
-    print('IE==>'+ie)
-    cnae = elemento.xpath("ns:infCad/ns:CNAE", namespaces=ns)[0].text
-    print('CNAE==>'+cnae)
-    rgap = elemento.xpath("ns:infCad/ns:xRegApur", namespaces=ns)[0].text
-    print('Regime==>'+str(rgap))
-    csit = elemento.xpath("ns:infCad/ns:cSit", namespaces=ns)[0].text
 
      
