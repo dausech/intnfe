@@ -21,7 +21,7 @@ def consulta_cad(uf,ie):
     try:
         if uf in ['PR','SP','MS']:
            elemento = root[0][0][0][0]
-        else
+        else:
            elemento = root[1][0][0][0]   
         ns = {'ns':'http://www.portalfiscal.inf.br/nfe'}
         cstat = elemento.xpath("ns:cStat", namespaces=ns)[0].text        
