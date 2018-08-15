@@ -50,13 +50,14 @@ cfg.read('config.ini')
 CERT = cfg.get("geral","cert_pfx")
 SENHA = cfg.get("geral","cert_pwd")   
 HOMOLOG = cfg.getboolean("geral","homologacao")  
-UF = "MS"
-
+UF = "PR"
+IE = "6140027780"
+# PR 9057048856     SC 256167990     SP;283103922115  MS;283021098 PR;9061784435  RS 0962574082
 con = ComunicacaoSefaz(UF, CERT, SENHA, HOMOLOG)  
 try:
-    retorno = con.consultar_cadastro(modelo="nfe",ie="",cnpj="05958813000102")    
+    retorno = con.consultar_cadastro(modelo="nfe",ie=IE,cnpj='')    
     trata_retorno(retorno)
-    arq = open('retorno.htm','w')
+    arq = open('retorno'+UF+IE+'.htm','w')
     arq.write(retorno.text)
     arq.close
 except requests.exceptions.RequestException:

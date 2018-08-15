@@ -19,9 +19,12 @@ def consulta_cad(uf,ie):
 
     root = etree.fromstring(retorno.content)
     try:
-        elemento = root[1][0][0][0]
+        if uf in ['PR','SP','MS']:
+           elemento = root[0][0][0][0]
+        else
+           elemento = root[1][0][0][0]   
         ns = {'ns':'http://www.portalfiscal.inf.br/nfe'}
-        cstat = elemento.xpath("ns:cStat", namespaces=ns)[0].text
+        cstat = elemento.xpath("ns:cStat", namespaces=ns)[0].text        
         if cstat in ['111','112']:
             cnpj = elemento.xpath("ns:infCad/ns:CNPJ", namespaces=ns)[0].text
             csit = elemento.xpath("ns:infCad/ns:cSit", namespaces=ns)[0].text
