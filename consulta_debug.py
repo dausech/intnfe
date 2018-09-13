@@ -17,7 +17,10 @@ except ImportError:
 def trata_retorno(retorno):
     root = etree.fromstring(retorno.content)
     try:
-        elemento = root[1][0][0][0]
+        if UF in ['PR','SP','MS']:
+           elemento = root[0][0][0][0]
+        else:
+           elemento = root[1][0][0][0]   
         ns = {'ns':'http://www.portalfiscal.inf.br/nfe'}    
         cstat = elemento.xpath("ns:cStat", namespaces=ns)[0].text
         cnpj = ''
@@ -50,9 +53,10 @@ cfg.read('config.ini')
 CERT = cfg.get("geral","cert_pfx")
 SENHA = cfg.get("geral","cert_pwd")   
 HOMOLOG = cfg.getboolean("geral","homologacao")  
-UF = "PR"
-IE = "6140027780"
-# PR 9057048856     SC 256167990     SP;283103922115  MS;283021098 PR;9061784435  RS 0962574082
+UF = "SC"
+IE = "254305130"
+
+# PR 9057048856     SC 256167990     SP;283103922115  MS;283021098 PR;9061784435  RS 0962574082  DF;0732530600156
 con = ComunicacaoSefaz(UF, CERT, SENHA, HOMOLOG)  
 try:
     retorno = con.consultar_cadastro(modelo="nfe",ie=IE,cnpj='')    
@@ -60,8 +64,8 @@ try:
     arq = open('retorno'+UF+IE+'.htm','w')
     arq.write(retorno.text)
     arq.close
-except requests.exceptions.RequestException:
-    print('erro ao conectar..')
+except requests.exceptions.RequestException as e:
+    print("Erro ao conectar: ", e)
 
 
      
