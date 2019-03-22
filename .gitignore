@@ -1,4 +1,6 @@
 in/
+log/
+venv/
 config.ini
-retorno.htm
+
 

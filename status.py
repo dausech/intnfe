@@ -12,8 +12,9 @@ def status(modelo):
         return None    
 
 def mostra(ret):        
+   # print(ret.content)
     root = etree.fromstring(ret.content)        
-    elemento = root[1][0][0]                    
+    elemento = root[0][0][0]                    
     ns = {'ns':'http://www.portalfiscal.inf.br/nfe'}    
     cstat = elemento.xpath('ns:cStat', namespaces=ns)[0].text
     tpamb = elemento.xpath('ns:tpAmb', namespaces=ns)[0].text
