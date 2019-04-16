@@ -16,6 +16,8 @@ def consulta_cad(uf,ie):
         retorno = con.consultar_cadastro(modelo="nfe",cnpj='',ie=ie)
     except requests.exceptions.ConnectionError:
         return cstat, cnpj, csit, cnae
+    except requests.exceptions.ReadTimeout:    
+        return cstat, cnpj, csit, cnae
 
     root = etree.fromstring(retorno.content)
     try:

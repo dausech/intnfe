@@ -57,6 +57,8 @@ def consulta_cad(uf,ie):
             'numero':str(numero)}
 
 def processar_arq(cnaes_alvo):  
+    relacao = open("in/ativos.txt","r")  
+    arqtxt = open("in/ativos_varejistas.csv","w")
     contador = 0
     for linha in relacao:
         contador += 1                
@@ -70,23 +72,19 @@ def processar_arq(cnaes_alvo):
             arqtxt.write(ln)
             print("processando ", str(contador), ln)        
             time.sleep(1)
+    arqtxt.close()        
+    relacao.close()
                                                                                                
 if __name__ == "__main__":
-   cfg = configparser.ConfigParser()
-   cfg.read('config.ini')
-   CERT_PFX = cfg.get("geral","cert_pfx")
-   CERT_PWD = cfg.get("geral","cert_pwd")   
-   HOMOLOGACAO = cfg.getboolean("geral","homologacao")  
-   CNAES_ALVO = cfg.get("geral","cnae").split(',')  
-   ARQ_IN = "in/ativos.txt"
-   ARQ_OUT = "in/ativos_ret.csv"
-   DIR_HIST = "in/lotes/"  
-   linhas_reproc = []
-   passo = 1
-   if os.path.exists(ARQ_IN):
-       print("iniciando...", CNAES_ALVO)
-       arqtxt = open(ARQ_OUT,"w")
-       relacao = open(ARQ_IN,"r")         
-       processar_arq(CNAES_ALVO)
-       relacao.close()
-       arqtxt.close()
+    cfg = configparser.ConfigParser()
+    cfg.read('config.ini')
+    CERT_PFX = cfg.get("geral","cert_pfx")
+    CERT_PWD = cfg.get("geral","cert_pwd")   
+    HOMOLOGACAO = cfg.getboolean("geral","homologacao")  
+    CNAES_ALVO = cfg.get("geral","cnae").split(',')    
+    linhas_reproc = []
+    passo = 1
+    print("iniciando...", CNAES_ALVO)                     
+    processar_arq(CNAES_ALVO)
+       
+       

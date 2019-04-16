@@ -53,8 +53,8 @@ cfg.read('config.ini')
 CERT = cfg.get("geral","cert_pfx")
 SENHA = cfg.get("geral","cert_pwd")   
 HOMOLOG = cfg.getboolean("geral","homologacao")  
-UF = "PR"
-IE = "1000084758"
+UF = "MS"
+IE = "283916710"
 
 # PR 9057048856     SC 256167990     SP;283103922115  MS;283021098 PR;9061784435  RS 0962574082  DF;0732530600156
 con = ComunicacaoSefaz(UF, CERT, SENHA, HOMOLOG)  

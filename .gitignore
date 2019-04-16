@@ -2,5 +2,7 @@ in/
 log/
 venv/
 config.ini
+anotacoes.txt
+retorno*.htm
 
 
