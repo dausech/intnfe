@@ -34,7 +34,7 @@ if __name__ == '__main__':
     cfg.read('config.ini')
     CERT = cfg.get("geral","cert_pfx")
     SENHA = cfg.get("geral","cert_pwd")  
-    UF = 'pr'
+    UF = 'PR'
     homologacao = False
     
     ret_nfe = status('nfe')
