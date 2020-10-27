@@ -1,7 +1,7 @@
 cffi==1.12.3
 chardet==3.0.4
 colorama==0.4.1
-cryptography==2.7
+cryptography==3.2
 future==0.16.0
 psycopg2==2.8.4
 pycparser==2.19
