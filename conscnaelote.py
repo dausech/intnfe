@@ -57,7 +57,7 @@ def consulta_cad(uf,ie):
             'numero':str(numero)}
 
 def processar_arq(cnaes_alvo):  
-    relacao = open("in/ativos.txt","r")  
+    relacao = open("in/ativos1.txt","r")  
     arqtxt = open("in/ativos_varejistas.csv","w")
     contador = 0
     for linha in relacao:

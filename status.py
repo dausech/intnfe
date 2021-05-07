@@ -12,7 +12,7 @@ def status(modelo):
         return None    
 
 def mostra(ret):        
-   # print(ret.content)
+    print(ret.content)
     root = etree.fromstring(ret.content)        
     elemento = root[0][0][0]                    
     ns = {'ns':'http://www.portalfiscal.inf.br/nfe'}    

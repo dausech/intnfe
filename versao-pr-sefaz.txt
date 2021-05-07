@@ -1,0 +1,36 @@
+PR:
+
+Status da Sefaz - NF-e:
+41
+1
+PR-v4_7_26
+215
+Falha no schema XML
+2021-04-05T08:50:37-03:00
+
+Status da Sefaz - NFC-e:
+41
+1
+PR-v4_4_9
+215
+Falha no schema XML
+2021-04-05T08:50:37-03:00
+------------------------------------------
+SP:
+
+35
+1
+SP_NFE_PL009_V4
+107
+Serviço em Operação
+2021-04-05T09:17:28-03:00
+
+Status da Sefaz - NFC-e:
+
+35
+1
+SP_NFCE_PL_009_V400
+107
+Serviço em Operação
+2021-04-05T09:17:28-03:00
+
