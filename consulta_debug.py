@@ -106,19 +106,19 @@ def consulta_sefaz(uf, ie, cnpj):
 #ie = "105164070"
 #uf = "MS"
 #ie = "283435720"
-#uf = "MG"
-#ie = "3442021270020"
+uf = "MG"
+ie = "3442021270020"
 #uf = "MT"
 #ie = "137265824"
 #uf = "BA"
 #ie = "130901367"
-#cnpj = ""
+cnpj = ""
 #cnpj = '13731542000186'
 #uf = "SP"
 #ie = "647790314110"
-uf = 'PR'
-cnpj = '' # '79265617000199'
-ie = "9057048856"
+#uf = 'PR'
+#cnpj = '79265617000199'
+#ie = "9057048856"
 
 
 hoje = datetime.date.today()
